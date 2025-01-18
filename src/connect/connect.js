@@ -37,7 +37,7 @@ class NekoEmit extends EventEmitter {
       process.exit(0);
     };
     const { saveCreds, state } = await useMultiFileAuthState(
-      `./Auth-Info/${this.socketConfig.session}`,
+      `./Auth-Info/${this.socketConfig.session}`
     );
     const Neko = makeWASocket({
       ...this.socketConfig,
@@ -55,7 +55,7 @@ class NekoEmit extends EventEmitter {
     }
 
     Neko.ev.on("connection.update", async (update) =>
-      Connection(update, this, clearState),
+      Connection(update, this, clearState)
     );
 
     Neko.ev.on("creds.update", saveCreds);
@@ -146,15 +146,14 @@ class NekoEmit extends EventEmitter {
     }
   };
 
-  sendImageMessage = async (from, url, m, caption = "Neko") => {
+  sendImageMessage = async (from, url, m) => {
     try {
       return await this.sendMessage(
         from,
         {
           image: typeof url === "string" ? { url } : url,
-          caption,
         },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -166,7 +165,7 @@ class NekoEmit extends EventEmitter {
       return await this.sendMessage(
         from,
         { video: typeof url === "string" ? { url } : url },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -182,7 +181,7 @@ class NekoEmit extends EventEmitter {
           mimetype: "audio/mpeg",
           ptt: ppt ?? false,
         },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -198,7 +197,7 @@ class NekoEmit extends EventEmitter {
           mimetype: "application/pdf",
           fileName: `${~~(Math.random() * 1e9)}.pdf`,
         },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -249,7 +248,7 @@ class NekoEmit extends EventEmitter {
             },
           },
         },
-        {},
+        {}
       );
 
       await this.relayMessage(
@@ -258,7 +257,7 @@ class NekoEmit extends EventEmitter {
         {
           messageId: msg.key.id,
         },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -296,7 +295,7 @@ class NekoEmit extends EventEmitter {
             },
           },
         },
-        {},
+        {}
       );
 
       await this.relayMessage(
@@ -305,7 +304,7 @@ class NekoEmit extends EventEmitter {
         {
           messageId: msg.key.id,
         },
-        { quoted: m },
+        { quoted: m }
       );
     } catch (error) {
       throw new Error(error);
@@ -320,7 +319,7 @@ class NekoEmit extends EventEmitter {
         {},
         {
           reuploadRequest: Neko.updateMediaMessage,
-        },
+        }
       );
       const dataType = await fileTypeFromBuffer(buffer);
       return {

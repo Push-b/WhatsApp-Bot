@@ -1,5 +1,5 @@
 import { fileTypeFromBuffer } from "file-type";
-import insta from "instagram-url-direct";
+import insta from "../../utils/igdl.js";
 import axios from "axios";
 import YT from "../../utils/ytdl.js";
 export default {
@@ -29,13 +29,13 @@ export default {
             "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
             "(\\?[;&a-z\\d%_.~+=-]*)?" +
             "(\\#[-a-z\\d_]*)?$",
-          "i",
+          "i"
         );
         return !!urlPattern.test(url);
       };
       let urlCheck = (url) => {
         const instaRegex = new RegExp(
-          "https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?:p|tv|reel)\\/[\\w-]+\\/?",
+          "https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?:p|tv|reel)\\/[\\w-]+\\/?"
         );
         const ytRegex = "youtu";
         if (instaRegex.test(url)) {
@@ -51,21 +51,21 @@ export default {
         return await Neko.sendTextMessage(
           M.from,
           "Please provide a valid URL.",
-          M,
+          M
         );
       }
       const whichUrl = urlCheck(args);
 
       if (whichUrl === "insta") {
         const data = await insta(args);
-        if (!data.url_list?.length) {
+        if (!data?.length) {
           return await Neko.sendTextMessage(
             M.from,
             "Failed to download media from the provided URL.",
-            M,
+            M
           );
         }
-        data?.url_list.forEach(async (url) => {
+        data?.forEach(async ({ url }) => {
           let res = await axios.get(url, {
             responseType: "arraybuffer",
           });
@@ -73,7 +73,7 @@ export default {
             return await Neko.sendTextMessage(
               M.from,
               "Failed to download media from the provided URL.",
-              M,
+              M
             );
           }
 
@@ -82,7 +82,7 @@ export default {
           if (type.mime.includes("video")) {
             return await Neko.sendVideoMessage(M.from, res.data, M);
           } else {
-            return await Neko.sendImageMessage(M.from, res.data, M);
+            return await Neko.sendImageMessage(M.from, url, M);
           }
         });
         return;
