@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Sticker, StickerTypes } from "@shibam/sticker-maker"; // ES6
+import { Sticker, StickerTypes } from "wa-sticker-formatter"; // ES6
 
 class TelegramScraper {
   constructor(opt) {
