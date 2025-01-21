@@ -1,6 +1,6 @@
 import yts from "yt-search";
 import YT from "../../utils/ytdl.js";
-
+import axios from "axios"
 export default {
   name: "play",
   aliases: ["p"],
@@ -41,12 +41,12 @@ export default {
       let { url } = videos[Math.floor(Math.random() * 1)];
 
       if (M.args.includes("--video") || M.args.includes("-v")) {
-        let yt = new YT(url, "video");
-        let res = await yt.download();
+        let yt = await YT.ytmp4(url);
+        let res = await axios.get(yt.video, { responseType: "arraybuffer" });
         return await Neko.sendVideoMessage(M.from, res, M);
       } else {
-        let yt = new YT(url, "audio");
-        let res = await yt.download();
+        let yt = await YT.ytmp3(url);
+        let res = await axios.get(yt.audio, { responseType: "arraybuffer" });
         return await Neko.sendAudioMessage(M.from, res, M);
       }
     } catch (error) {

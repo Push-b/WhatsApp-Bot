@@ -88,12 +88,12 @@ export default {
         return;
       } else if (whichUrl === "yt") {
         if (M.args.includes("--audio") || M.args.includes("-a")) {
-          let yt = new YT(args, "audio");
-          let res = await yt.download();
+          let yt = await YT.ytmp3(args);
+          let res = await axios.get(yt.audio, { responseType: "arraybuffer" });
           return await Neko.sendAudioMessage(M.from, res, M);
         } else {
-          let yt = new YT(args, "video");
-          let res = await yt.download();
+          let yt = await YT.ytmp4(args);
+          let res = await axios.get(yt.video, { responseType: "arraybuffer" });
           return await Neko.sendVideoMessage(M.from, res, M);
         }
       } else {
