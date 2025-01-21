@@ -1,4 +1,4 @@
-import Sticker from "@shibam/sticker-maker";
+import { Sticker, StickerTypes } from "@shibam/sticker-maker";
 import fs from "fs";
 export default {
   name: "sticker",
@@ -52,7 +52,8 @@ export default {
           pack: "Shibam",
           author: "Neko-MD",
           category: ["🤩", "🎉"],
-          quality: 70,
+          quality: 40,
+          type: StickerTypes.DEFAULT,
         });
         let buff = await sticker.build();
         fs.writeFileSync(`lol.webp`, buff);
