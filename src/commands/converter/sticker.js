@@ -1,5 +1,5 @@
 import { Sticker, StickerTypes } from "@shibam/sticker-maker";
-import fs from "fs";
+
 export default {
   name: "sticker",
   aliases: ["s"],
@@ -22,7 +22,7 @@ export default {
         return await Neko.sendTextMessage(
           M.from,
           "Please reply to an image or video to convert it to sticker",
-          M
+          M,
         );
       }
       if (
@@ -34,7 +34,7 @@ export default {
         return Neko.sendTextMessage(
           M.from,
           "Please reply to an image or video",
-          M
+          M,
         );
       }
 
@@ -46,14 +46,15 @@ export default {
       ) {
         let buffer = await Neko.downloadMediaContent(
           Neko,
-          M.message?.imageMessage || M.message?.videoMessage ? M : M.quoted
+          M.message?.imageMessage || M.message?.videoMessage ? M : M.quoted,
         );
         let sticker = new Sticker(buffer.data, {
           pack: "Shibam",
           author: "Neko-MD",
           category: ["🤩", "🎉"],
-          quality: 40,
+          quality: 7,
           type: StickerTypes.DEFAULT,
+          text: M.args,
         });
         let buff = await sticker.toBuffer();
         await Neko.sendStickerMessage(M.from, buff, M);
