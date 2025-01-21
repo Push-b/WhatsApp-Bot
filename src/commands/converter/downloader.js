@@ -89,12 +89,10 @@ export default {
       } else if (whichUrl === "yt") {
         if (M.args.includes("--audio") || M.args.includes("-a")) {
           let yt = await YT.ytmp3(args);
-          let res = await axios.get(yt.audio, { responseType: "arraybuffer" });
-          return await Neko.sendAudioMessage(M.from, res, M);
+          return await Neko.sendAudioMessage(M.from, yt.audio, M);
         } else {
           let yt = await YT.ytmp4(args);
-          let res = await axios.get(yt.video, { responseType: "arraybuffer" });
-          return await Neko.sendVideoMessage(M.from, res, M);
+          return await Neko.sendVideoMessage(M.from, yt.video, M);
         }
       } else {
         return await Neko.sendTextMessage(M.from, "*Inavlid Url Provided!*", M);
