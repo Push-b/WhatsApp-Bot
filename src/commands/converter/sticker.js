@@ -55,8 +55,7 @@ export default {
           quality: 40,
           type: StickerTypes.DEFAULT,
         });
-        let buff = await sticker.build();
-        fs.writeFileSync(`lol.webp`, buff);
+        let buff = await sticker.toBuffer();
         await Neko.sendStickerMessage(M.from, buff, M);
       }
     } catch (error) {
