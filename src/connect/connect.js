@@ -15,7 +15,7 @@ import pkg from "@whiskeysockets/baileys";
 const { proto } = pkg;
 const META_DATA = JSON.parse(fs.readFileSync("src/config.json", "utf-8"));
 const loggerOptions = {
-  level: "debug",
+  level: "silent",
 };
 const logger = Pino(loggerOptions).child({});
 
