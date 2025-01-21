@@ -1,4 +1,4 @@
-import { Sticker, StickerTypes } from "wa-sticker-formatter";
+import { Sticker, StickerTypes } from "@shibam/sticker-maker";
 export default {
   name: "steal",
   alias: ["stealsticker", "sticker", "stiker"],

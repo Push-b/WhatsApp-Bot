@@ -8,6 +8,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@shibam/sticker-maker": "^1.2.15",
     "@whiskeysockets/baileys": "^6.7.9",
     "axios": "^1.7.5",
     "cli-color": "^2.0.4",
