@@ -19,7 +19,7 @@
     "figlet": "^1.7.0",
     "file-type": "^19.4.1",
     "form-data": "^4.0.0",
-    "hercai": "^12.3.2",
+    "hercai": "^12.4.0",
     "instagram-url-direct": "^1.0.20",
     "jimp": "^0.16.13",
     "node-cron": "^3.0.3",

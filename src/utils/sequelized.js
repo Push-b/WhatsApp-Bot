@@ -100,7 +100,7 @@ const sequilizer = async (Neko, m) => {
       isPro: [...modsList, ...pros].includes(sender),
       isReassign: Reassign.includes(from),
       isCmd: text?.startsWith(META_DATA.prefix),
-      isBotMsg: m.pushName.length === 0,
+      isBotMsg: !m.pushName,
       isBotAdmin: isGroup
         ? admins.includes(`${Neko.user.id.split(":")[0]}@s.whatsapp.net`)
         : false,
@@ -118,7 +118,7 @@ const sequilizer = async (Neko, m) => {
         message: m.message?.extendedTextMessage?.contextInfo?.quotedMessage,
       },
       isMentioned:
-        m.message?.[messageType]?.contextInfo?.mentionedJid?.length !== 0,
+        m.message?.[messageType]?.contextInfo?.mentionedJid.length > 0,
       isQuoted: m.message?.extendedTextMessage?.contextInfo?.quotedMessage,
     };
     return mUpdated;

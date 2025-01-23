@@ -7,7 +7,7 @@ export default {
   desc: "Generate an image using AI",
   category: "fun",
   usage: `imgai <prompt> --style/-s=<style_name> --negative/-n=<negative_prompt>`,
-  cooldown: 30,
+  cooldown: 15,
   isAdmin: false,
   isBotAdmin: false,
   isGroup: false,
@@ -41,7 +41,7 @@ export default {
       const [imageUrl] = await Promise.all([
         hercai.drawImage({
           prompt,
-          negative_prompt: negPrompt ?? "no blur,no blood",
+          negative_prompt: negPrompt ?? "no blur,no blood,no nsfw,no porn",
           sampler: "DPM-Solver" /* Default => DPM-Solver */,
           image_style: imgStyle /* Default => Null */,
           width: 1024 /* Default => 1024 */,
@@ -58,7 +58,7 @@ export default {
         );
       }
       let { data } = await axios.get(imageUrl.url, {
-        responseType: "stream"
+        responseType: "arraybuffer"
       })
       await Neko.sendImageMessage(M.from, data, M);
     } catch (error) {

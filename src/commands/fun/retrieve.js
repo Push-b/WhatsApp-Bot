@@ -14,6 +14,7 @@ export default {
   run: async (Neko, M) => {
     try {
       let mess = Object.keys(M.quoted.message);
+      console.log(mess);
       if (
         mess.includes("viewOnceMessageV2") ||
         mess.includes("viewOnceMessageV2Extension")
