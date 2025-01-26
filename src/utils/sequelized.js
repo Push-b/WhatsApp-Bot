@@ -26,7 +26,6 @@ const getMessageText = (message, messageType) => {
   message?.conversation ||
   message?.[messageType]?.text ||
   message?.[messageType]?.caption ||
-  message?.[messageType]?.contextInfo?.quotedMessage?.conversation ||
   (message?.[messageType]?.selectedId
     ? Neko.prefix + message?.[messageType]?.selectedId
     : null) ||
