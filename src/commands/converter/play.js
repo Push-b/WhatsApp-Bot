@@ -45,19 +45,7 @@ export default {
         return await Neko.sendVideoMessage(M.from, yt.video, M);
       } else {
         let yt = await YT.ytmp3(url);
-        let thumb = await axios.get(yt.thumbnail, {
-          responseType: "arraybuffer",
-        });
-
-        return await Neko.sendAudioMessage(M.from, yt.audio, M, false, {
-          externalAdReply: {
-            title: yt.title,
-            body: "Shibam",
-            thumbnail: thumb,
-            mediaType: 2,
-            mediaUrl: url,
-          },
-        });
+        return await Neko.sendAudioMessage(M.from, yt.audio, M, false,);
       }
     } catch (error) {
       await Neko.error(error);
