@@ -23,12 +23,12 @@ const fetchGroupMode = async (id,N) => {
 
 const getMessageText = (message, messageType) => {
   return (
-  m.message?.conversation ||
-  m.message?.[messageType]?.text ||
-  m.message?.[messageType]?.caption ||
-  m.message?.[messageType]?.contextInfo?.quotedMessage?.conversation ||
-  (m.message?.[messageType]?.selectedId
-    ? Neko.prefix + m.message?.[messageType]?.selectedId
+  message?.conversation ||
+  message?.[messageType]?.text ||
+  message?.[messageType]?.caption ||
+  message?.[messageType]?.contextInfo?.quotedMessage?.conversation ||
+  (message?.[messageType]?.selectedId
+    ? Neko.prefix + message?.[messageType]?.selectedId
     : null) ||
   messageType ||
   ""
