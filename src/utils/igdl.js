@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
- 
 
 async function igdl(url) {
   return new Promise(async (resolve) => {
@@ -18,10 +17,9 @@ async function igdl(url) {
         });
       }
 
-
       const response = await axios.post(
         "https://snapsave.app/action.php?lang=id",
-        new URLSearchParams({ url }), 
+        new URLSearchParams({ url }),
         {
           headers: {
             accept:
@@ -39,9 +37,7 @@ async function igdl(url) {
       const $ = cheerio.load(htmlContent);
       const results = [];
 
-
       if ($("article.media > figure").length || $("table.table").length) {
-
         const thumbnail = $("article.media > figure").find("img").attr("src");
 
         $("tbody > tr").each((_, element) => {
@@ -51,7 +47,6 @@ async function igdl(url) {
           const downloadUrl =
             cells.eq(2).find("a").attr("href") ||
             cells.eq(2).find("button").attr("onclick");
-
 
           const needsProgressApi = /get_progressApi/gi.test(downloadUrl || "");
           const finalUrl = needsProgressApi
@@ -96,9 +91,7 @@ async function igdl(url) {
   });
 }
 
-
 function parseSnapsaveResponse(response) {
-
   const encodedData = extractEncodedData(response);
   if (!encodedData) return response;
 

@@ -16,6 +16,11 @@ const fetchGroupData = async (filter) => {
   return groups.map((group) => group?.group_id);
 };
 
+const fetchGroupMode = async (id,N) => {
+  const groups = await group_db.getGroup(id,N)
+  return groups.mode
+};
+
 const getMessageText = (message, messageType) => {
   return (
     message?.conversation ||
@@ -30,7 +35,7 @@ const getMessageText = (message, messageType) => {
 const sequilizer = async (Neko, m) => {
   try {
     if (m.key?.remoteJid === "status@broadcast") return;
-    const [mods, pros, bans, GcBan, Antilink, Welcome, Reassign] =
+    const [mods, pros, bans, GcBan, Antilink, Welcome, Reassign, ChatAi] =
       await Promise.all([
         fetchUserData("isMod"),
         fetchUserData("isPro"),
@@ -39,6 +44,7 @@ const sequilizer = async (Neko, m) => {
         fetchGroupData("isAntilink"),
         fetchGroupData("isWelcome"),
         fetchGroupData("isReassign"),
+        fetchGroupData("isChatAi")
       ]);
 
     const messageType = getContentType(m.message);
@@ -54,13 +60,15 @@ const sequilizer = async (Neko, m) => {
       : isGroup
         ? m.key?.participant
         : from;
-    let groupMeta, admins;
+    let groupMeta, admins, mode;
     if (isGroup) {
       groupMeta = await Neko.groupMetadata(from);
       admins = groupMeta.participants.filter((v) => v.admin).map((v) => v.id);
+      mode = fetchGroupMode(groupMeta.id,groupMeta.subject);
     } else {
       groupMeta = null;
       admins = [];
+      mode = null
     }
     const ownerNumber = META_DATA.ownerNumber.map((v) => `${v}@s.whatsapp.net`);
     const modsList = [...ownerNumber, ...mods];
@@ -93,13 +101,16 @@ const sequilizer = async (Neko, m) => {
       gcBan: GcBan,
       antilink: Antilink,
       welcome: Welcome,
+      chatAi: ChatAi,
       isWelcome: Welcome.includes(from),
       isAntilink: Antilink.includes(from),
       isGcBanned: GcBan.includes(from),
       isBanned: bans.includes(sender),
+      isChatAi: ChatAi.includes(from),
       isPro: [...modsList, ...pros].includes(sender),
       isReassign: Reassign.includes(from),
       isCmd: text?.startsWith(META_DATA.prefix),
+      mode,
       isBotMsg: !m.pushName,
       isBotAdmin: isGroup
         ? admins.includes(`${Neko.user.id.split(":")[0]}@s.whatsapp.net`)
@@ -118,8 +129,8 @@ const sequilizer = async (Neko, m) => {
         message: m.message?.extendedTextMessage?.contextInfo?.quotedMessage,
       },
       isMentioned:
-        m.message?.[messageType]?.contextInfo?.mentionedJid.length > 0,
-      isQuoted: m.message?.extendedTextMessage?.contextInfo?.quotedMessage,
+        m.message?.[messageType]?.contextInfo?.mentionedJid?.length > 0,
+      isQuoted: !!m.message?.extendedTextMessage?.contextInfo?.quotedMessage,
     };
     return mUpdated;
   } catch (error) {

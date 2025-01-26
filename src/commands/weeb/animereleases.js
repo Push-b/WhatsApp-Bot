@@ -26,7 +26,8 @@ export default {
         return await Neko.sendTextMessage(M.from, "No anime releases found", M);
       }
       const sortedData = data.sort(
-        (resA, resB) => resA.airingAt - resB.airingAt);
+        (resA, resB) => resA.airingAt - resB.airingAt,
+      );
 
       for (const anime of sortedData) {
         const { id, episode, media, airingAt } = anime;

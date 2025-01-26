@@ -58,8 +58,8 @@ export default {
         );
       }
       let { data } = await axios.get(imageUrl.url, {
-        responseType: "arraybuffer"
-      })
+        responseType: "arraybuffer",
+      });
       await Neko.sendImageMessage(M.from, data, M);
     } catch (error) {
       await Neko.error(error);

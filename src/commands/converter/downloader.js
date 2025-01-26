@@ -29,13 +29,13 @@ export default {
             "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
             "(\\?[;&a-z\\d%_.~+=-]*)?" +
             "(\\#[-a-z\\d_]*)?$",
-          "i"
+          "i",
         );
         return !!urlPattern.test(url);
       };
       let urlCheck = (url) => {
         const instaRegex = new RegExp(
-          "https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?:p|tv|reel)\\/[\\w-]+\\/?"
+          "https?:\\/\\/(?:www\\.)?instagram\\.com\\/(?:p|tv|reel)\\/[\\w-]+\\/?",
         );
         const ytRegex = "youtu";
         if (instaRegex.test(url)) {
@@ -51,7 +51,7 @@ export default {
         return await Neko.sendTextMessage(
           M.from,
           "Please provide a valid URL.",
-          M
+          M,
         );
       }
       const whichUrl = urlCheck(args);
@@ -62,7 +62,7 @@ export default {
           return await Neko.sendTextMessage(
             M.from,
             "Failed to download media from the provided URL.",
-            M
+            M,
           );
         }
         data?.forEach(async ({ url }) => {
@@ -73,7 +73,7 @@ export default {
             return await Neko.sendTextMessage(
               M.from,
               "Failed to download media from the provided URL.",
-              M
+              M,
             );
           }
 

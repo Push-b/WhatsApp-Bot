@@ -1,6 +1,6 @@
 import yts from "yt-search";
 import YT from "../../utils/ytdl.js";
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "play",
   aliases: ["p"],
@@ -45,7 +45,19 @@ export default {
         return await Neko.sendVideoMessage(M.from, yt.video, M);
       } else {
         let yt = await YT.ytmp3(url);
-        return await Neko.sendAudioMessage(M.from, yt.audio, M);
+        let thumb = await axios.get(yt.thumbnail, {
+          responseType: "arraybuffer",
+        });
+
+        return await Neko.sendAudioMessage(M.from, yt.audio, M, false, {
+          externalAdReply: {
+            title: yt.title,
+            body: "Shibam",
+            thumbnail: thumb,
+            mediaType: 2,
+            mediaUrl: url,
+          },
+        });
       }
     } catch (error) {
       await Neko.error(error);
