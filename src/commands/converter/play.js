@@ -45,7 +45,7 @@ export default {
         return await Neko.sendVideoMessage(M.from, yt.video, M);
       } else {
         let yt = await YT.ytmp3(url);
-        return await Neko.sendAudioMessage(M.from, yt.audio, M, false,);
+        return await Neko.sendAudioMessage(M.from, yt.audio, M, false);
       }
     } catch (error) {
       await Neko.error(error);

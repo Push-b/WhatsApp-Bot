@@ -229,7 +229,8 @@ const messageHandler = async (Neko, m) => {
 
     operation.attempt(async () => {
       try {
-        if (!M.sender || !M.sender.includes("@s.whatsapp.net") || !M.pushName) return;
+        if (!M.sender || !M.sender.includes("@s.whatsapp.net") || !M.pushName)
+          return;
         Neko.user_db = user_db;
         Neko.gc_db = gc_db;
         await gc_db.getGroup(M.from, M?.groupMeta?.subject);

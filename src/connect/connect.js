@@ -111,11 +111,7 @@ class NekoEmit extends EventEmitter {
 
   sendStickerMessage = async (from, data, m) => {
     try {
-      return await this.sendMessage(
-        from,
-        { sticker: data },
-        { quoted: m },
-      );
+      return await this.sendMessage(from, { sticker: data }, { quoted: m });
     } catch (error) {
       throw new Error(error);
     }

@@ -13,16 +13,16 @@ export default {
   isMod: false,
   run: async (Neko, M) => {
     try {
-        await Neko.sendMessage(M.from,{
-            pin: {
-                type: true, // 0 to remove
-                time: 86400,
-                key: M.key
-            }
-        })
-        await Neko.sendTextMessage(M.from,"Pinned Message",M)
+      await Neko.sendMessage(M.from, {
+        pin: {
+          type: true, // 0 to remove
+          time: 86400,
+          key: M.key,
+        },
+      });
+      await Neko.sendTextMessage(M.from, "Pinned Message", M);
     } catch (error) {
-        await Neko.errror(error)
+      await Neko.errror(error);
     }
   },
 };

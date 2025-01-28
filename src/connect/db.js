@@ -34,6 +34,7 @@ class UserDbFunc {
             isMod: false,
             isMarried: false,
             partner: null,
+            isStatusView: false,
             proposal: [],
           }));
         return newUser;
@@ -163,6 +164,23 @@ class UserDbFunc {
           throw new Error("User not found");
         }
         user.proposal = user.proposal.filter((p) => p !== partner);
+        await this.setUser(sender, user);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async setStatusView(Sender, state = true) {
+    try {
+      if (!Sender.endsWith("@g.us")) {
+        let sender = Sender.replace("@s.whatsapp.net", "");
+        let user = await this.getUser(sender);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        user.isStatusView = state;
         await this.setUser(sender, user);
       }
     } catch (error) {
