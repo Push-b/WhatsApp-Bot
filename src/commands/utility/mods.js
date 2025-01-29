@@ -15,6 +15,7 @@ export default {
     try {
       let mods = await Neko.user_db
         .filterUser("isMod", true)
+        mods = mods
         .map((user) => user?.user_id);
       let modsText = "_*-:All Mods:-*_\n";
       for (let i = 0; i < mods.length; i++) {

@@ -60,7 +60,7 @@ class UserDbFunc {
     try {
       let users = JSON.parse(fs.readFileSync(userFilePath));
       users[userId] = data;
-      fs.writeFileSync(userFilePath, JSON.stringify(users));
+      fs.writeFileSync(userFilePath, JSON.stringify(users,null,2));
       return data;
     } catch (error) {
       console.log(error);
@@ -248,7 +248,7 @@ class GroupDbFunc {
     try {
       let groups = JSON.parse(fs.readFileSync(groupFilePath));
       groups[groupId] = data;
-      fs.writeFileSync(groupFilePath, JSON.stringify(groups));
+      fs.writeFileSync(groupFilePath, JSON.stringify(groups,null,2));
       return data;
     } catch (error) {
       console.log(error);
