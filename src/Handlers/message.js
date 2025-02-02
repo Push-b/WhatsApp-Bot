@@ -96,10 +96,7 @@ const messageHandler = async (Neko, m) => {
     const handleCommand = async ({ Neko, M }) => {
       try {
         if (M?.mode === "private" && !M?.isMod && M?.isGroup) return false;
-
-        if (M?.mode === "admin" && (!M?.isAdmin || !M?.isMod) && M?.isGroup)
-          return false;
-
+        if (M?.mode === "admin" && (!M?.isAdmin || !M?.isMod) && M?.isGroup) return false;
         if (M?.quoted.sender || M.mention[0]) {
           if (M?.mention) {
             M.mention.forEach(async (mention) => {

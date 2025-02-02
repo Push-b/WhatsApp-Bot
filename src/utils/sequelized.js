@@ -6,14 +6,14 @@ const META_DATA = JSON.parse(fs.readFileSync("src/config.json", "utf-8"));
 const user_db = new DB.UserDbFunc();
 const group_db = new DB.GroupDbFunc();
 
-const fetchUserData = async (id, filter) => {
-  const user = await user_db.getUser(id);
+const fetchUserData = async (id, filter,pushName) => {
+  const user = await user_db.getUser(id,pushName);
   if (user) return user[filter];
   return null;
 };
 
-const fetchGroupData = async (id, filter) => {
-  const group = await group_db.getGroup(id);
+const fetchGroupData = async (id, filter,gcName) => {
+  const group = await group_db.getGroup(id,gcName);
   if (group) return group[filter];
   return null;
 };
@@ -33,8 +33,7 @@ const getMessageText = (message, messageType) => {
 
 const sequilizer = async (Neko, m) => {
   try {
-    // console.log(m,m.message);
-    if (m.key?.remoteJid === "status@broadcast") return;
+    if (m.key?.remoteJid === "status@broadcast") return
     if (
       !m.key?.remoteJid.includes("@s.whatsapp.net") &&
       !m.key?.remoteJid.includes("@g.us")
@@ -54,6 +53,15 @@ const sequilizer = async (Neko, m) => {
         ? m.key?.participant
         : from;
 
+    
+    let groupMeta, admins
+    if (isGroup) {
+      groupMeta = await Neko.groupMetadata(from);
+      admins = groupMeta.participants.filter((v) => v.admin).map((v) => v.id);
+    } else {
+      groupMeta = null;
+      admins = [];
+    }
     const [
       isMod,
       isPro,
@@ -64,27 +72,20 @@ const sequilizer = async (Neko, m) => {
       isWelcome,
       isReassign,
       isChatAi,
+      mode
     ] = await Promise.all([
-      fetchUserData(sender, "isMod"),
-      fetchUserData(sender, "isPro"),
-      fetchUserData(sender, "isBanned"),
-      fetchUserData(sender, "isStatusView"),
-      fetchGroupData(from, "isBanned"),
-      fetchGroupData(from, "isAntilink"),
-      fetchGroupData(from, "isWelcome"),
-      fetchGroupData(from, "isReassign"),
-      fetchGroupData(from, "isChatAi"),
+      fetchUserData(sender, "isMod",m.pushName),
+      fetchUserData(sender, "isPro",m.pushName),
+      fetchUserData(sender, "isBanned",m.pushName),
+      fetchUserData(sender, "isStatusView",m.pushName),
+      fetchGroupData(from, "isBanned",groupMeta?.subject),
+      fetchGroupData(from, "isAntilink",groupMeta?.subject),
+      fetchGroupData(from, "isWelcome", groupMeta?.subject),
+      fetchGroupData(from, "isReassign", groupMeta?.subject),
+      fetchGroupData(from, "isChatAi", groupMeta?.subject),
+      fetchGroupData(from, "mode", groupMeta?.subject),
     ]);
-    let groupMeta, admins, mode;
-    if (isGroup) {
-      groupMeta = await Neko.groupMetadata(from);
-      admins = groupMeta.participants.filter((v) => v.admin).map((v) => v.id);
-      mode = fetchGroupData(groupMeta.id, groupMeta.subject);
-    } else {
-      groupMeta = null;
-      admins = [];
-      mode = null;
-    }
+
     const ownerNumber = META_DATA.ownerNumber.map((v) => `${v}@s.whatsapp.net`);
     const mUpdated = {
       ...m,
@@ -108,13 +109,13 @@ const sequilizer = async (Neko, m) => {
       args: text
         ?.slice(META_DATA.prefix.length + text.split(" ")[0].length)
         .trim(),
-      isStatusView: ownerNumber.includes(sender) || isStatusView,
+      isStatusView,
       isWelcome,
       isAntilink,
       isGcBanned,
       isBanned,
       isChatAi,
-      isPro: ownerNumber.includes(sender) || isPro,
+      isPro,
       isReassign,
       isCmd: text?.startsWith(META_DATA.prefix),
       mode,
@@ -122,7 +123,7 @@ const sequilizer = async (Neko, m) => {
       isBotAdmin: isGroup
         ? admins.includes(`${Neko.user.id.split(":")[0]}@s.whatsapp.net`)
         : false,
-      isMod: ownerNumber.includes(sender) || isMod,
+      isMod,
       isStatus:
         m.message?.extendedTextMessage?.contextInfo?.remoteJid?.includes(
           "status@broadcast",
