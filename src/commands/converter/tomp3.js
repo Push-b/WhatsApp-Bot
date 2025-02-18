@@ -67,12 +67,11 @@ export default {
           ]);
           break;
         default:
-          await Neko.sendTextMessage(
+          return await Neko.sendTextMessage(
             M.from,
             "Invalid audio type. Please use --list to see the available audio types.",
             M,
           );
-          break;
       }
       return await Neko.sendAudioMessage(M.from, audio, M);
     } catch (error) {

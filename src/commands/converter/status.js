@@ -13,6 +13,7 @@ export default {
   isOwner: false,
   run: async (Neko, M) => {
     try {
+      console.log(M)
       if (M.isGroup) {
         return await Neko.sendTextMessage(
           M.from,

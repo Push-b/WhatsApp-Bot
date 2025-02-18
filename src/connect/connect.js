@@ -37,7 +37,7 @@ class NekoEmit extends EventEmitter {
       process.exit(0);
     };
     const { saveCreds, state } = await useMultiFileAuthState(
-      `./Auth-Info/${this.socketConfig.session}`
+      `./Auth-Info/${this.socketConfig.session}`,
     );
     const Neko = makeWASocket({
       ...this.socketConfig,
@@ -55,7 +55,7 @@ class NekoEmit extends EventEmitter {
     }
 
     Neko.ev.on("connection.update", async (update) =>
-      Connection(update, this, clearState)
+      Connection(update, this, clearState),
     );
 
     Neko.ev.on("creds.update", saveCreds);
@@ -105,6 +105,7 @@ class NekoEmit extends EventEmitter {
     }
     this.prefix = META_DATA.prefix;
     this.commands = await loadCommands();
+    return true;
   }
 
   log = (type, text, text2) => Log(type, text, text2, this);
@@ -152,8 +153,9 @@ class NekoEmit extends EventEmitter {
         from,
         {
           image: typeof url === "string" ? { url } : url,
+          caption: "> Developed By *ShibamDey69*",
         },
-        { quoted: m }
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
@@ -164,15 +166,18 @@ class NekoEmit extends EventEmitter {
     try {
       return await this.sendMessage(
         from,
-        { video: typeof url === "string" ? { url } : url },
-        { quoted: m }
+        {
+          video: typeof url === "string" ? { url } : url,
+          caption: "> Developed By *ShibamDey69*",
+        },
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
     }
   };
 
-  sendAudioMessage = async (from, url, m, ppt) => {
+  sendAudioMessage = async (from, url, m, ppt, contextInfo = {}) => {
     try {
       return await this.sendMessage(
         from,
@@ -180,8 +185,11 @@ class NekoEmit extends EventEmitter {
           audio: typeof url === "string" ? { url } : url,
           mimetype: "audio/mpeg",
           ptt: ppt ?? false,
+          contextInfo: {
+            ...contextInfo,
+          },
         },
-        { quoted: m }
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
@@ -194,10 +202,11 @@ class NekoEmit extends EventEmitter {
         from,
         {
           document: typeof url === "string" ? { url } : url,
+          caption: "> Developed By *ShibamDey69*",
           mimetype: "application/pdf",
           fileName: `${~~(Math.random() * 1e9)}.pdf`,
         },
-        { quoted: m }
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
@@ -248,7 +257,7 @@ class NekoEmit extends EventEmitter {
             },
           },
         },
-        {}
+        {},
       );
 
       await this.relayMessage(
@@ -257,7 +266,7 @@ class NekoEmit extends EventEmitter {
         {
           messageId: msg.key.id,
         },
-        { quoted: m }
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
@@ -295,7 +304,7 @@ class NekoEmit extends EventEmitter {
             },
           },
         },
-        {}
+        {},
       );
 
       await this.relayMessage(
@@ -304,7 +313,7 @@ class NekoEmit extends EventEmitter {
         {
           messageId: msg.key.id,
         },
-        { quoted: m }
+        { quoted: m },
       );
     } catch (error) {
       throw new Error(error);
@@ -319,7 +328,7 @@ class NekoEmit extends EventEmitter {
         {},
         {
           reuploadRequest: Neko.updateMediaMessage,
-        }
+        },
       );
       const dataType = await fileTypeFromBuffer(buffer);
       return {

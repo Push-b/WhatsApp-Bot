@@ -1,24 +1,24 @@
 export default {
-  name: "mod",
-  aliases: ["mod"],
-  description: "Set or unset a user's mod status",
+  name: "statusview",
+  aliases: ["sv"],
+  description: "Set or unset a user's status",
   category: "mods",
-  usage: "mod @tag/mention --true/false",
+  usage: "status @tag/mention --true/false",
   cooldown: 5,
   isAdmin: false,
   isBotAdmin: false,
   isGroup: false,
   isOwner: true,
-  isPro: false,
+  isStatus: false,
   isMod: false,
   run: async (Neko, M) => {
     try {
-      // Determine the user to be modified and the new mod status
+      // Determine the user to be modified and the new status
       let user = M.isMentioned ? M.mention[0] : M.quoted.sender;
       if (!user) {
         return Neko.sendTextMessage(
           M.from,
-          "Please mention or quote a user to modify their mod status.",
+          "Please mention or quote a user to modify their status.",
           M,
         );
       }
@@ -32,25 +32,23 @@ export default {
         );
       }
 
-      let isMod = status === "true";
+      let isStatus = status === "true";
       let userId = user.split("@")[0];
       let usr = await Neko.user_db.getUser(userId);
-      if (usr.isMod === isMod) {
+      if (usr.isStatus === isStatus) {
         return Neko.sendMentionMessage(
           M.from,
-          `User *@${userId}* is already ${isMod ? "a mod" : "not a mod"}.`,
+          `User *@${userId}* is already ${isStatus ? "a status viewer" : "not a status viewer"}.`,
           [user],
           M,
         );
       }
 
-      // Update the user's mod status
-      await Neko.user_db.setMod(userId, isMod);
-      await Neko.user_db.setPro(userId, isMod);
-      let action = isMod ? "promoted to" : "demoted from";
+      await Neko.user_db.setStatusView(userId, isStatus);
+      let action = isStatus ? "granted" : "revoked";
       return Neko.sendMentionMessage(
         M.from,
-        `User *@${userId}* has been ${action} mod status.`,
+        `User *@${userId}* has been ${action} status.`,
         [user],
         M,
       );

@@ -39,22 +39,22 @@ export default {
         );
       }
       if (isFriendAI) {
-        await Neko.gc_db.setGcChatAi(M.from, true)
+        await Neko.gc_db.setGcChatAi(M.from, true);
         return await Neko.sendTextMessage(
           M.from,
           "AI friend has been enabled.",
-          M
+          M,
         );
       } else {
-        await Neko.gc_db.setGcChatAi(M.from, false)
+        await Neko.gc_db.setGcChatAi(M.from, false);
         return await Neko.sendTextMessage(
           M.from,
           "AI friend has been disabled.",
-          M
+          M,
         );
       }
     } catch (error) {
       await Neko.error(error);
     }
-  }
-}
+  },
+};

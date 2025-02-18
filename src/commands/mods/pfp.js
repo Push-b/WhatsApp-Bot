@@ -19,14 +19,14 @@ export default {
         await Neko.sendTextMessage(
           M.from,
           "Please reply to an image to set as bot profile picture",
-          M
+          M,
         );
         return;
       }
 
       const image = await Neko.downloadMediaContent(
         Neko,
-        M.message?.imageMessage ? M : quoted
+        M.message?.imageMessage ? M : quoted,
       );
       const { img } = await generatePP(image.data);
 
@@ -49,7 +49,7 @@ export default {
       return await Neko.sendTextMessage(
         M.from,
         "Successfully changed bot's profile picture",
-        M
+        M,
       );
     } catch (error) {
       await Neko.error(error);

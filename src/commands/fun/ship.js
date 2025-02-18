@@ -14,7 +14,8 @@ export default {
   run: async (Neko, M) => {
     try {
       const user = M.isMentioned ? M.mention[0] : M?.quoted?.sender;
-      if (user) {
+
+      if (!user) {
         return await Neko.sendTextMessage(
           M.from,
           "Please mention two users to ship",

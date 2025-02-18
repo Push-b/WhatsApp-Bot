@@ -14,10 +14,13 @@ export default {
   run: async (Neko, M) => {
     try {
       let mess = Object.keys(M.quoted.message);
-      console.log(mess);
       if (
         mess.includes("viewOnceMessageV2") ||
-        mess.includes("viewOnceMessageV2Extension")
+        mess.includes("viewOnceMessageV2Extension") ||
+        mess.includes("imageMessage") ||
+        mess.includes("videoMessage") ||
+        mess.includes("audioMessage") ||
+        mess.includes("stickerMessage")
       ) {
         let res = await Neko.downloadMediaContent(Neko, M.quoted);
 

@@ -16,7 +16,7 @@ export default {
       const participants = M.groupMeta.participants
         .map((v) => v.id)
         .filter((v) => v !== M.sender);
-      const args = M.args || M.quoted.text;
+      const args = M.quoted.text || M.args;
       const hidden = args?.includes("--hidden") || args?.includes("-h");
       const arg = hidden
         ? args?.replace("--hidden", "")?.replace("-h", "")

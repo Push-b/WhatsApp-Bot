@@ -34,6 +34,7 @@ class UserDbFunc {
             isMod: false,
             isMarried: false,
             partner: null,
+            isStatusView: false,
             proposal: [],
           }));
         return newUser;
@@ -59,7 +60,7 @@ class UserDbFunc {
     try {
       let users = JSON.parse(fs.readFileSync(userFilePath));
       users[userId] = data;
-      fs.writeFileSync(userFilePath, JSON.stringify(users));
+      fs.writeFileSync(userFilePath, JSON.stringify(users, null, 2));
       return data;
     } catch (error) {
       console.log(error);
@@ -170,6 +171,23 @@ class UserDbFunc {
       throw new Error(error);
     }
   }
+
+  async setStatusView(Sender, state = true) {
+    try {
+      if (!Sender.endsWith("@g.us")) {
+        let sender = Sender.replace("@s.whatsapp.net", "");
+        let user = await this.getUser(sender);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        user.isStatusView = state;
+        await this.setUser(sender, user);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
 }
 
 class GroupDbFunc {
@@ -230,7 +248,7 @@ class GroupDbFunc {
     try {
       let groups = JSON.parse(fs.readFileSync(groupFilePath));
       groups[groupId] = data;
-      fs.writeFileSync(groupFilePath, JSON.stringify(groups));
+      fs.writeFileSync(groupFilePath, JSON.stringify(groups, null, 2));
       return data;
     } catch (error) {
       console.log(error);
